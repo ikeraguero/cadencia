@@ -1,0 +1,25 @@
+# Sobe um PostgreSQL já com o usuário e o banco do projeto.
+#
+#   docker compose up -d
+#
+# Se a porta 5432 já estiver ocupada por um PostgreSQL local, defina outra:
+#
+#   CADENCIA_PORT=55432 docker compose up -d
+#
+# e ajuste PGPORT no .env. O script ./iniciar.sh faz isso sozinho.
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: cadencia-pg
+    environment:
+      POSTGRES_USER: cadencia
+      POSTGRES_PASSWORD: cadencia
+      POSTGRES_DB: cadencia
+    ports:
+      # A porta do hospedeiro vem de CADENCIA_PORT (o iniciar.sh escolhe uma livre).
+      - "${CADENCIA_PORT:-5432}:5432"
+    volumes:
+      - cadencia-dados:/var/lib/postgresql/data
+
+volumes:
+  cadencia-dados:
